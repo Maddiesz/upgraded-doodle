@@ -1,22 +1,19 @@
-<form id="form">
-  <input type="text" name="hobby" id="sample" /> <!-- Modified -->
-  <input name="file" id="uploadfile" type="file" />
-  <input id="submit" type="submit" />
-</form>
-
-<script src="https://cdn.jsdelivr.net/gh/tanaikech/HtmlFormObjectParserForGoogleAppsScript_js@master/htmlFormObjectParserForGoogleAppsScript_js.min.js"></script>
-<script>
-  const url = "https://script.google.com/macros/sAKfycbwDNhj5MawvUYWvcZU1j9VDZLoeBXbWSljrx3GchjiIGle49KDL9nLhnReta8plf_cVexec";
-  const form = document.getElementById("form");
-  form.addEventListener("submit", async (e) => {
-    e.preventDefault();
-    const obj = await ParseFormObjectForGAS(form);
-    fetch(url, {
-      method: "POST",
-      body: JSON.stringify(obj),
-    })
-    .then((res) => res.json())
-    .then(console.log)
-    .catch(console.log);
-  });
-</script>
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Warehouse Form</title>
+</head>
+<body>
+  <h1>Warehouse Form</h1>
+  <form id="warehouseForm" enctype="multipart/form-data">
+    <label for="title">Title:</label>
+    <input type="text" id="title" name="title"><br>
+    <label for="brand">Brand:</label>
+    <input type="text" id="brand" name="brand"><br>
+    <label for="file">Attach File:</label>
+    <input type="file" id="file" name="file"><br>
+    <input type="submit" value="Submit">
+  </form>
+  <script src="https://script.google.com/macros/s/AKfycbwDNhj5MawvUYWvcZU1j9VDZLoeBXbWSljrx3GchjiIGle49KDL9nLhnReta8plf_cV/exec"></script>
+</body>
+</html>
