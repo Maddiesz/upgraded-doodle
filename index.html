@@ -1,33 +1,42 @@
 <!DOCTYPE html>
 <html>
-
 <head>
-    <title>Sample script for uploading file to Google Drive without authorization</title>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.js"></script>
+    <title>File Upload Form</title>
 </head>
-
 <body>
-    <form action="https://script.google.com/macros/sAKfycbwDNhj5MawvUYWvcZU1j9VDZLoeBXbWSljrx3GchjiIGle49KDL9nLhnReta8plf_cVexec" id="form" method="post">
-        Upload a file
-        <div id="data"></div>
-        <input name="file" id="uploadfile" type="file">
-        <input id="submit" type="submit">
+    <h1>File Upload Form</h1>
+    <form id="uploadForm">
+        <label for="name">Name:</label>
+        <input type="text" id="name" name="name" required><br><br>
+        <label for="file">File:</label>
+        <input type="file" id="file" name="file" required><br><br>
+        <input type="submit" value="Submit">
     </form>
+
     <script>
-    $('#uploadfile').on("change", function() {
-        var file = this.files[0];
-        var fr = new FileReader();
-        fr.fileName = file.name;
-        fr.onload = function(e) {
-            e.target.result
-            html = '<input type="hidden" name="data" value="' + e.target.result.replace(/^.*,/, '') + '" >';
-            html += '<input type="hidden" name="mimetype" value="' + e.target.result.match(/^.*(?=;)/)[0] + '" >';
-            html += '<input type="hidden" name="filename" value="' + e.target.fileName + '" >';
-            $("#data").empty().append(html);
+        // Submit form data
+        document.getElementById("uploadForm").addEventListener("submit", function(event) {
+            event.preventDefault();
+            var form = event.target;
+            var formData = new FormData(form);
+            uploadFile(formData);
+        });
+
+        // Upload file to Google Drive
+        function uploadFile(formData) {
+            var xhr = new XMLHttpRequest();
+            xhr.open("POST", "https://script.google.com/macros/s/AKfycbwDNhj5MawvUYWvcZU1j9VDZLoeBXbWSljrx3GchjiIGle49KDL9nLhnReta8plf_cV/exec");
+            xhr.onload = function() {
+                if (xhr.status === 200) {
+                    console.log("File uploaded successfully");
+                    // Handle successful upload
+                } else {
+                    console.error("Error uploading file");
+                    // Handle upload error
+                }
+            };
+            xhr.send(formData);
         }
-        fr.readAsDataURL(file);
-    });
     </script>
 </body>
-
 </html>
