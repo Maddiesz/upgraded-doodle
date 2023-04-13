@@ -1,99 +1,53 @@
 <!DOCTYPE html>
 <html>
-
 <head>
-    <title>Warehouse Requests Form</title>
-    <script src="https://script.google.com/macros/s/AKfycbyF3ReVIhmCBxAbA7L72-XMhj56gy7Wfe5AtKxNpPPS5POsEO0Poi7ycOacGtubcxyV/exec"></script>
-    <script>
-        // Add a new row to the repeater
-        function addRow() {
-            var row = `
-            <div class="row">
-                <input type="text" name="fba_id[]" required placeholder="FBA ID">
-                <input type="text" name="fba_reference[]" required placeholder="FBA Reference">
-                <input type="number" name="no_units[]" required placeholder="No. Units">
-                <input type="number" name="no_skus[]" required placeholder="No. SKUs">
-                <button type="button" onclick="removeRow(this)">-</button>
-            </div>
-            `;
-            $('#repeater').append(row);
-        }
-
-        // Remove a row from the repeater
-        function removeRow(btn) {
-            $(btn).closest('.row').remove();
-        }
-
-        // Submit form data to Google Apps Script
-        function submitForm() {
-            var brand = $('#brand').val();
-            var email = $('#email').val();
-            var fbaIds = $('[name="fba_id[]"]').map(function () { return $(this).val(); }).get();
-            var fbaReferences = $('[name="fba_reference[]"]').map(function () { return $(this).val(); }).get();
-            var noUnits = $('[name="no_units[]"]').map(function () { return $(this).val(); }).get();
-            var noSkus = $('[name="no_skus[]"]').map(function () { return $(this).val(); }).get();
-            var files = $('[name="files[]"]')[0].files;
-
-            var formData = new FormData();
-            formData.append('brand', brand);
-            formData.append('email', email);
-            for (var i = 0; i < fbaIds.length; i++) {
-                formData.append('fba_id[]', fbaIds[i]);
-                formData.append('fba_reference[]', fbaReferences[i]);
-                formData.append('no_units[]', noUnits[i]);
-                formData.append('no_skus[]', noSkus[i]);
-            }
-            for (var i = 0; i < files.length; i++) {
-                formData.append('files[]', files[i]);
-            }
-
-            $.ajax({
-                url: 'https://script.google.com/macros/s/AKfycbyF3ReVIhmCBxAbA7L72-XMhj56gy7Wfe5AtKxNpPPS5POsEO0Poi7ycOacGtubcxyV/exec',
-                method: 'POST',
-                data: formData,
-                processData: false,
-                contentType: false,
-                success: function (response) {
-                    console.log(response);
-                    alert('Form data submitted successfully!');
-                },
-                error: function (xhr, status, error) {
-                    console.error(xhr, status, error);
-                    alert('Form data submission failed. Please try again.');
-                }
-            });
-        }
-    </script>
+  <title>Warehouse Request</title>
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
-
 <body>
-    <h1>Warehouse Requests Form</h1>
-    <form>
-        <label for="brand">Brand: </label>
-        <input type="text" id="brand" required>
-        <br>
-        <label for="email">E-mail: </label>
-        <input type="email" id="email" required>
-        <br>
-		<label for="files">Upload Files: </label>
-        <input type="file" id="files" name="files[]" multiple required>
-        <br>
-        <h2>Warehouse Requests:</h2>
-        <div id="repeater">
-            <div class="row">
-                <input type="text" name="fba_id[]" required placeholder="FBA ID">
-                <input type="text" name="fba_reference[]" required placeholder="FBA Reference">
-                <input type="number" name="no_units[]" required placeholder="No. Units">
-                <input type="number" name="no_skus[]" required placeholder="No. SKUs">
-                <button type="button" onclick="removeRow(this)">-</button>
-            </div>
-        </div>
-        <button type="button" onclick="addRow()">Add Row</button>
-        <br>
-        <button type="button" onclick="submitForm()">Submit</button>
-    </form>
+  <h1>Warehouse Request Form</h1>
+  <form id="warehouseRequestForm">
+    <label for="brandName">Brand Name:</label>
+    <input type="text" id="brandName" name="brandName">
+    <br>
+    <label for="email">E-mail:</label>
+    <input type="email" id="email" name="email">
+    <br>
+    <label for="fbaId">FBA ID:</label>
+    <input type="text" id="fbaId" name="fbaId">
+    <br>
+    <label for="fbaReference">FBA Reference:</label>
+    <input type="text" id="fbaReference" name="fbaReference">
+    <br>
+    <label for="noSkus">No. SKUs:</label>
+    <input type="number" id="noSkus" name="noSkus">
+    <br>
+    <label for="files">Attach Files:</label>
+    <input type="file" id="files" name="files[]" multiple>
+    <br>
+    <input type="submit" value="Submit">
+  </form>
+  <script>
+    $(document).ready(function() {
+      // Submit form data to Google Sheets
+      $("#warehouseRequestForm").on("submit", function(event) {
+        event.preventDefault();
+        var formData = new FormData(this);
+        $.ajax({
+          url: "https://script.google.com/macros/s/AUTOGENERATED_SCRIPT_ID/exec",
+          type: "POST",
+          data: formData,
+          contentType: false,
+          processData: false,
+          success: function(response) {
+            console.log("Form data submitted to Google Sheets:", response);
+          },
+          error: function(error) {
+            console.error("Error submitting form data to Google Sheets:", error);
+          }
+        });
+      });
+    });
+  </script>
 </body>
-
 </html>
-
-       
