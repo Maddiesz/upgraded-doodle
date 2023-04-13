@@ -1,42 +1,22 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>File Upload Form</title>
-</head>
-<body>
-    <h1>File Upload Form</h1>
-    <form id="uploadForm">
-        <label for="name">Name:</label>
-        <input type="text" id="name" name="name" required><br><br>
-        <label for="file">File:</label>
-        <input type="file" id="file" name="file" required><br><br>
-        <input type="submit" value="Submit">
-    </form>
+<form id="form">
+  <input type="text" name="hobby" id="sample" /> <!-- Modified -->
+  <input name="file" id="uploadfile" type="file" />
+  <input id="submit" type="submit" />
+</form>
 
-    <script>
-        // Submit form data
-        document.getElementById("uploadForm").addEventListener("submit", function(event) {
-            event.preventDefault();
-            var form = event.target;
-            var formData = new FormData(form);
-            uploadFile(formData);
-        });
-
-        // Upload file to Google Drive
-        function uploadFile(formData) {
-            var xhr = new XMLHttpRequest();
-            xhr.open("POST", "https://script.google.com/macros/s/AKfycbwDNhj5MawvUYWvcZU1j9VDZLoeBXbWSljrx3GchjiIGle49KDL9nLhnReta8plf_cV/exec");
-            xhr.onload = function() {
-                if (xhr.status === 200) {
-                    console.log("File uploaded successfully");
-                    // Handle successful upload
-                } else {
-                    console.error("Error uploading file");
-                    // Handle upload error
-                }
-            };
-            xhr.send(formData);
-        }
-    </script>
-</body>
-</html>
+<script src="https://cdn.jsdelivr.net/gh/tanaikech/HtmlFormObjectParserForGoogleAppsScript_js@master/htmlFormObjectParserForGoogleAppsScript_js.min.js"></script>
+<script>
+  const url = "https://script.google.com/macros/s/###/exec";
+  const form = document.getElementById("form");
+  form.addEventListener("submit", async (e) => {
+    e.preventDefault();
+    const obj = await ParseFormObjectForGAS(form);
+    fetch(url, {
+      method: "POST",
+      body: JSON.stringify(obj),
+    })
+    .then((res) => res.json())
+    .then(console.log)
+    .catch(console.log);
+  });
+</script>
